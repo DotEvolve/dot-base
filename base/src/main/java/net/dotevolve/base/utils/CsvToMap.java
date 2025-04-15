@@ -21,6 +21,11 @@ import com.fasterxml.jackson.dataformat.csv.CsvParser;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 
 public class CsvToMap {
+
+    private CsvToMap() {
+        // Prevent instantiation
+    }
+
     public static List<Map<String, String>> read(ByteArrayResource src) throws IOException {
         List<Map<String, String>> response = new LinkedList<Map<String, String>>();
         CsvMapper mapper = new CsvMapper();
