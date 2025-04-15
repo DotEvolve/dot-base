@@ -8,14 +8,6 @@
 
 package net.dotevolve.base.thirdParty;
 
-import javax.activation.DataHandler;
-import javax.activation.DataSource;
-import javax.activation.FileDataSource;
-import javax.mail.BodyPart;
-import javax.mail.Multipart;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
@@ -36,15 +28,27 @@ import net.dotevolve.base.utils.DateUtil;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
+import jakarta.activation.DataHandler;
+import jakarta.activation.DataSource;
+import jakarta.activation.FileDataSource;
+import jakarta.mail.BodyPart;
+import jakarta.mail.Multipart;
+import jakarta.mail.internet.MimeBodyPart;
+import jakarta.mail.internet.MimeMessage;
+import jakarta.mail.internet.MimeMultipart;
 
 @Service
 public class MailService {
+
     @Autowired
     private JavaMailSender emailSender;
+
     @Autowired
     private DateUtil dateUtil;
+
     @Autowired
     private Configuration config;
+
     @Value("${environment}")
     private String env;
 
@@ -85,7 +89,6 @@ public class MailService {
             delivery.setStatus(NotificationDeliveryEnum.DELIVERED);
             return delivery;
         } catch (Exception e) {
-            e.printStackTrace();
             NotificationDelivery delivery = new NotificationDelivery();
             delivery.setTime(dateUtil.getCurrentDateTime(DateTimeFormatEnum.FULL_DATE_TIME));
             delivery.setStatus(NotificationDeliveryEnum.ERROR);
@@ -140,7 +143,6 @@ public class MailService {
             delivery.setStatus(NotificationDeliveryEnum.DELIVERED);
             return delivery;
         } catch (Exception e) {
-            e.printStackTrace();
             NotificationDelivery delivery = new NotificationDelivery();
             delivery.setTime(dateUtil.getCurrentDateTime(DateTimeFormatEnum.FULL_DATE_TIME));
             delivery.setStatus(NotificationDeliveryEnum.ERROR);
