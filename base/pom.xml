@@ -12,11 +12,6 @@
     <name>base</name>
     <packaging>jar</packaging>
 
-    <properties>
-        <sonar.organization>dotevolve</sonar.organization>
-        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
-    </properties>
-
     <dependencyManagement>
         <dependencies>
             <dependency>
