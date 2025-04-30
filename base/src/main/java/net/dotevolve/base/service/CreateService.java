@@ -34,13 +34,13 @@ public class CreateService<Data extends BaseEntity> {
         try {
             handler.onChange(dataCreated);
         } catch (Exception e) {
-            e.printStackTrace();
+            // Handle exception
         }
         for (AChangeHandler<Data> changeHandler : handler.additionalChangeHandlers()) {
             try {
                 changeHandler.onChange(dataCreated);
             } catch (Exception e) {
-                e.printStackTrace();
+                // Handle exception
             }
         }
         return dataCreated;

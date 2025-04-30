@@ -27,7 +27,7 @@ public class CsvToMap {
     }
 
     public static List<Map<String, String>> read(ByteArrayResource src) throws IOException {
-        List<Map<String, String>> response = new LinkedList<Map<String, String>>();
+        List<Map<String, String>> response = new LinkedList<>();
         CsvMapper mapper = new CsvMapper();
         mapper.enable(CsvParser.Feature.IGNORE_TRAILING_UNMAPPABLE);
         CsvSchema schema = CsvSchema.emptySchema().withHeader();

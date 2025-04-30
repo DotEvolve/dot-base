@@ -1,4 +1,4 @@
-package net.dotevolve.base.data.commonObjects;
+package net.dotevolve.base.data.commons.object;
 
 import lombok.Data;
 

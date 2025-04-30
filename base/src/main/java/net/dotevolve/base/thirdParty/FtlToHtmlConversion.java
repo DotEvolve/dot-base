@@ -40,7 +40,7 @@ public class FtlToHtmlConversion {
 
             return stringWriter.toString();
         } catch (IOException | TemplateException e) {
-            e.printStackTrace();
+            // Handle exception
             throw new RuntimeException("load fail file");
         }
     }

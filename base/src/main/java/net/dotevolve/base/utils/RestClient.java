@@ -66,7 +66,7 @@ public class RestClient {
         }};
 
         try {
-            SSLContext sslContext = SSLContext.getInstance("SSL");
+            SSLContext sslContext = SSLContext.getInstance("TLSv1.3");
             sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
             HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.getSocketFactory());
             HttpsURLConnection.setDefaultHostnameVerifier(
@@ -77,13 +77,13 @@ public class RestClient {
     }
 
     public String get(String uri) {
-        HttpEntity<String> requestEntity = new HttpEntity<String>("", headers);
+        HttpEntity<String> requestEntity = new HttpEntity<>("", headers);
         ResponseEntity<String> responseEntity = rest.exchange(uri, HttpMethod.GET, requestEntity, String.class);
         return responseEntity.getBody();
     }
 
     public String post(String uri, String json) {
-        HttpEntity<String> requestEntity = new HttpEntity<String>(json, headers);
+        HttpEntity<String> requestEntity = new HttpEntity<>(json, headers);
         ResponseEntity<String> responseEntity = rest.exchange(uri, HttpMethod.POST, requestEntity, String.class);
         return responseEntity.getBody();
     }
@@ -95,7 +95,7 @@ public class RestClient {
         String base64Creds = new String(base64CredsBytes);
         HttpHeaders headers = addDefaultHeaders();
         headers.add(AUTHORIZATION, BASIC + base64Creds);
-        HttpEntity<String> requestEntity = new HttpEntity<String>(json, headers);
+        HttpEntity<String> requestEntity = new HttpEntity<>(json, headers);
         ResponseEntity<String> responseEntity = rest.exchange(uri, HttpMethod.POST, requestEntity, String.class);
         return responseEntity.getBody();
     }
@@ -115,13 +115,13 @@ public class RestClient {
         String base64Creds = new String(base64CredsBytes);
         HttpHeaders headers = addDefaultHeaders();
         headers.add(AUTHORIZATION, BASIC + base64Creds);
-        HttpEntity<String> requestEntity = new HttpEntity<String>(json, headers);
+        HttpEntity<String> requestEntity = new HttpEntity<>(json, headers);
         ResponseEntity<String> responseEntity = rest.exchange(uri, HttpMethod.GET, requestEntity, String.class);
         return responseEntity.getBody();
     }
 
     public String put(String uri, String json) {
-        HttpEntity<String> requestEntity = new HttpEntity<String>(json, headers);
+        HttpEntity<String> requestEntity = new HttpEntity<>(json, headers);
         ResponseEntity<String> responseEntity = rest.exchange(uri, HttpMethod.PUT, requestEntity, String.class);
         return responseEntity.getBody();
     }
@@ -133,7 +133,7 @@ public class RestClient {
         String base64Creds = new String(base64CredsBytes);
         HttpHeaders headers = addDefaultHeaders();
         headers.add(AUTHORIZATION, BASIC + base64Creds);
-        HttpEntity<String> requestEntity = new HttpEntity<String>(json, headers);
+        HttpEntity<String> requestEntity = new HttpEntity<>(json, headers);
         ResponseEntity<String> responseEntity = rest.exchange(uri, HttpMethod.PUT, requestEntity, String.class);
         return responseEntity.getBody();
     }
@@ -145,7 +145,7 @@ public class RestClient {
         String base64Creds = new String(base64CredsBytes);
         HttpHeaders headers = addDefaultHeaders();
         headers.add(AUTHORIZATION, BASIC + base64Creds);
-        HttpEntity<String> requestEntity = new HttpEntity<String>("", headers);
+        HttpEntity<String> requestEntity = new HttpEntity<>("", headers);
         rest.exchange(uri, HttpMethod.DELETE, requestEntity, String.class);
     }
 

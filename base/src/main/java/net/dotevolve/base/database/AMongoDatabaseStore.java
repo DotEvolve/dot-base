@@ -75,10 +75,8 @@ public abstract class AMongoDatabaseStore<Data extends BaseEntity, CollectionInf
 
     @Override
     public Data get(String id) {
-        if (cacheEnable()) {
-            if (cacheService.exists(id, collectionInfo.getName())) {
-                return (Data) cacheService.get(id, collectionInfo.getName());
-            }
+        if (cacheEnable() && cacheService.exists(id, collectionInfo.getName())) {
+            return (Data) cacheService.get(id, collectionInfo.getName()).get();
         }
         BasicDBObject data = primaryMongoTemplate.findOne(Query.query(Criteria.where("_id").is(id)),
                 BasicDBObject.class, collectionInfo.getName());
@@ -104,7 +102,7 @@ public abstract class AMongoDatabaseStore<Data extends BaseEntity, CollectionInf
     @Override
     public Pair<List<Data>, PaginationEntity> search(Query req) {
         List<BasicDBObject> dbObjects = primaryMongoTemplate.find(req, BasicDBObject.class, collectionInfo.getName());
-        List<Data> resp = new ArrayList<Data>();
+        List<Data> resp = new ArrayList<>();
         for (BasicDBObject dbObject : dbObjects) {
             resp.add(collectionInfo.getType(dbObject.toJson()));
         }
@@ -133,7 +131,7 @@ public abstract class AMongoDatabaseStore<Data extends BaseEntity, CollectionInf
         }
         List<BasicDBObject> dbObjects = primaryMongoTemplate.find(queryPairWithPagination.getFirst(),
                 BasicDBObject.class, collectionInfo.getName());
-        List<Data> resp = new ArrayList<Data>();
+        List<Data> resp = new ArrayList<>();
         for (BasicDBObject dbObject : dbObjects) {
             resp.add(collectionInfo.getType(dbObject.toJson()));
         }
@@ -156,7 +154,7 @@ public abstract class AMongoDatabaseStore<Data extends BaseEntity, CollectionInf
 
     @Override
     public InsertManyResult insertMany(List<Data> dataList) {
-        List<Document> documents = new ArrayList<Document>();
+        List<Document> documents = new ArrayList<>();
         for (Data data : dataList) {
             Document document = Document.parse(CodeHelp.toJson(data));
             documents.add(document);
@@ -175,7 +173,7 @@ public abstract class AMongoDatabaseStore<Data extends BaseEntity, CollectionInf
     @Override
     public BulkWriteResult updateMany(List<Data> dataList, boolean upsert) {
         MongoCollection<Document> collection = primaryMongoTemplate.getCollection(collectionInfo.getName());
-        List<WriteModel<Document>> writes = new ArrayList<WriteModel<Document>>();
+        List<WriteModel<Document>> writes = new ArrayList<>();
         ReplaceOptions updateOptions = new ReplaceOptions();
         updateOptions.upsert(upsert);
 
@@ -183,11 +181,11 @@ public abstract class AMongoDatabaseStore<Data extends BaseEntity, CollectionInf
             WriteModel<Document> writeModel;
             if (CodeHelp.isEmpty(data.getId())) {
                 data.setId(CodeHelp.getDocumentId());
-                writeModel = new InsertOneModel<Document>(Document.parse(CodeHelp.toJson(data)));
+                writeModel = new InsertOneModel<>(Document.parse(CodeHelp.toJson(data)));
             } else {
                 Query filter = Query.query(Criteria.where("_id").is(data.getId()));
                 Document replacement = Document.parse(CodeHelp.toJson(data));
-                writeModel = new ReplaceOneModel<Document>(filter.getQueryObject(), replacement, updateOptions);
+                writeModel = new ReplaceOneModel<>(filter.getQueryObject(), replacement, updateOptions);
             }
             writes.add(writeModel);
         }
@@ -201,18 +199,17 @@ public abstract class AMongoDatabaseStore<Data extends BaseEntity, CollectionInf
     @Override
     public BulkWriteResult upsertMany(List<Data> dataList) {
         MongoCollection<Document> collection = primaryMongoTemplate.getCollection(collectionInfo.getName());
-        List<WriteModel<Document>> writes = new ArrayList<WriteModel<Document>>();
+        List<WriteModel<Document>> writes = new ArrayList<>();
         for (Data data : dataList) {
             Document filter = Document.parse(CodeHelp.toJson(data));
             Query query = Query.query(Criteria.matchingDocumentStructure(MongoJsonSchema.of(filter)));
             Document replacement = Document.parse(CodeHelp.toJson(data));
             ReplaceOptions updateOptions = new ReplaceOptions().upsert(true);
-            ReplaceOneModel<Document> writeModel = new ReplaceOneModel<Document>(query.getQueryObject(), replacement,
+            ReplaceOneModel<Document> writeModel = new ReplaceOneModel<>(query.getQueryObject(), replacement,
                     updateOptions);
             writes.add(writeModel);
         }
-        BulkWriteResult bulkWriteResult = collection.bulkWrite(writes);
-        return bulkWriteResult;
+        return collection.bulkWrite(writes);
     }
 
     @Override
@@ -225,7 +222,7 @@ public abstract class AMongoDatabaseStore<Data extends BaseEntity, CollectionInf
     @Override
     public Pair<List<Data>, PaginationEntity> findAndProject(Query req) {
         List<BasicDBObject> dbObjects = primaryMongoTemplate.find(req, BasicDBObject.class, collectionInfo.getName());
-        List<Data> resp = new ArrayList<Data>();
+        List<Data> resp = new ArrayList<>();
         for (BasicDBObject dbObject : dbObjects) {
             resp.add(collectionInfo.getType(dbObject.toJson()));
         }

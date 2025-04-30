@@ -20,7 +20,7 @@ public class CachedSearchService<Data extends BaseEntity, SReq extends BaseEntit
 
     public List<Data> search(SReq request) {
         if (cacheService.exists(CodeHelp.toJson(request), request.getClass().getSimpleName())) {
-            return (List<Data>) cacheService.get(CodeHelp.toJson(request), request.getClass().getSimpleName());
+            return (List<Data>) cacheService.get(CodeHelp.toJson(request), request.getClass().getSimpleName()).get();
         }
         List<Data> resp = searchService.search(request);
         cacheService.save(CodeHelp.toJson(request), resp, request.getClass().getSimpleName());
