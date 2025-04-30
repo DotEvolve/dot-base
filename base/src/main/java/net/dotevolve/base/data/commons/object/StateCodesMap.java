@@ -1,4 +1,4 @@
-package net.dotevolve.base.data.commonObjects;
+package net.dotevolve.base.data.commons.object;
 
 import javax.annotation.PostConstruct;
 import java.util.HashMap;
@@ -182,7 +182,7 @@ public class StateCodesMap {
     }
 
     public boolean isStateCodeValid(String inputStateCode) {
-        if (StringUtils.isEmpty(inputStateCode)) {
+        if (!StringUtils.hasLength(inputStateCode)) {
             return false;
         }
         return stateCodeToStateNameMap.containsKey(inputStateCode.toLowerCase());

@@ -33,42 +33,40 @@ public class ExcelUtil {
 
 
     public static void readFromExcel(String filepath, String sheetName) throws IOException {
+        try (FileInputStream inputStream = new FileInputStream(filepath);
+             XSSFWorkbook workBook = new XSSFWorkbook(inputStream)) {
+            XSSFSheet sheet = workBook.getSheetAt(0); // get sheet by index
 
-        FileInputStream inputStream = new FileInputStream(filepath);
-        XSSFWorkbook workBook = new XSSFWorkbook(inputStream);
-
-        XSSFSheet sheet = workBook.getSheetAt(0); // get sheet by index
-
-        if (CodeHelp.notEmpty(sheetName)) {
-            sheet = workBook.getSheet(sheetName); //get sheet by name
-        }
-
-        Iterator iterator = sheet.iterator();
-        while (iterator.hasNext()) {
-            XSSFRow row = (XSSFRow) iterator.next();
-            Iterator cellIterator = row.cellIterator();
-
-            while (cellIterator.hasNext()) {
-                XSSFCell cell = (XSSFCell) cellIterator.next();
-                switch (cell.getCellType()) {
-                    case STRING:
-                        System.out.print(cell.getStringCellValue());
-                        break;
-                    case NUMERIC:
-                        System.out.print(cell.getNumericCellValue());
-                        break;
-                    case BOOLEAN:
-                        System.out.print(cell.getBooleanCellValue());
-                        break;
-                    case FORMULA:
-                        System.out.print(cell.getNumericCellValue());
-                        break;
-                }
-                System.out.print(" | ");
+            if (CodeHelp.notEmpty(sheetName)) {
+                sheet = workBook.getSheet(sheetName); //get sheet by name
             }
-            System.out.println();
+
+            Iterator iterator = sheet.iterator();
+            while (iterator.hasNext()) {
+                XSSFRow row = (XSSFRow) iterator.next();
+                Iterator cellIterator = row.cellIterator();
+
+                while (cellIterator.hasNext()) {
+                    XSSFCell cell = (XSSFCell) cellIterator.next();
+                    switch (cell.getCellType()) {
+                        case STRING:
+                            System.out.print(cell.getStringCellValue());
+                            break;
+                        case NUMERIC:
+                            System.out.print(cell.getNumericCellValue());
+                            break;
+                        case BOOLEAN:
+                            System.out.print(cell.getBooleanCellValue());
+                            break;
+                        case FORMULA:
+                            System.out.print(cell.getNumericCellValue());
+                            break;
+                    }
+                    System.out.print(" | ");
+                }
+                System.out.println();
+            }
         }
-        inputStream.close();
     }
 
     // ArrayList<Object[]> data = new ArrayList<Object[]>();
@@ -76,104 +74,95 @@ public class ExcelUtil {
     // 	data.add(new Object[]{"Dan", 23, "Saint Paul", "US"});
     // 	data.add(new Object[]{"Emmi", 24, "Burnsville", "US"});
     public static void writeToExcel(List<Object[]> data, String sheetName, String destinationPathWithFileName, String formula) throws IOException {
-        XSSFWorkbook workBook = new XSSFWorkbook();
-        XSSFSheet sheet = workBook.createSheet(sheetName);
+        try (XSSFWorkbook workBook = new XSSFWorkbook();
+             FileOutputStream outputStream = new FileOutputStream(destinationPathWithFileName)) {
+            XSSFSheet sheet = workBook.createSheet(sheetName);
 
-        //some logic using LOOP or ITERATOR
-        int rowNum = 0;
-        for (Object[] rowData : data) {
-            XSSFRow row = sheet.createRow(rowNum++);
-            int colNum = 0;
-            for (Object colElem : rowData) {
-                XSSFCell cell = row.createCell(colNum++);
-                if (colElem instanceof String) {
-                    cell.setCellValue((String) colElem);
+            //some logic using LOOP or ITERATOR
+            int rowNum = 0;
+            for (Object[] rowData : data) {
+                XSSFRow row = sheet.createRow(rowNum++);
+                int colNum = 0;
+                for (Object colElem : rowData) {
+                    XSSFCell cell = row.createCell(colNum++);
+                    if (colElem instanceof String) {
+                        cell.setCellValue((String) colElem);
+                    }
+                    if (colElem instanceof Boolean) {
+                        cell.setCellValue((Boolean) colElem);
+                    }
+                    if (colElem instanceof Integer) {
+                        cell.setCellValue((Integer) colElem);
+                    }
                 }
-                if (colElem instanceof Boolean) {
-                    cell.setCellValue((Boolean) colElem);
-                }
-                if (colElem instanceof Integer) {
-                    cell.setCellValue((Integer) colElem);
+                if (CodeHelp.notEmpty(formula)) {
+                    XSSFCell cell = row.createCell(colNum);
+                    cell.setCellFormula(formula);
                 }
             }
-            if (CodeHelp.notEmpty(formula)) {
-                XSSFCell cell = row.createCell(colNum);
-                cell.setCellFormula(formula);
-            }
+            workBook.write(outputStream);
+            System.out.printf("File [ %s ]written succesfully!!%n", destinationPathWithFileName);
         }
-        // destinationPathWithFileName = ".//datafiles/data.xlsx";
-        FileOutputStream outputStream = new FileOutputStream(destinationPathWithFileName);
-        workBook.write(outputStream);
-        outputStream.close();
-        System.out.printf("File [ %s ]written succesfully!!%n", destinationPathWithFileName);
-
     }
 
     // If : C8 is the cell to which formula to be applied then
     // cellRow = 7 & cellCol = 2
     // formula = SUM(C2:C6)
     public static void applyFormulaToParticularCell(String filePath, String sheetName, String formula, int cellRow, int cellCol) throws IOException {
-        FileInputStream inputStream = new FileInputStream(filePath);
-        XSSFWorkbook workBook = new XSSFWorkbook(inputStream);
-        XSSFSheet sheet = workBook.getSheetAt(0);
-        // if(CodeHelp.notEmpty(sheetName)){
-        //     sheet = workBook.getSheet(sheetName);
-        // }
-        sheet.getRow(7).getCell(4).setCellFormula("SUM(E2:E5)");
-        inputStream.close();
+        try (FileInputStream inputStream = new FileInputStream(filePath);
+             XSSFWorkbook workBook = new XSSFWorkbook(inputStream);
+             FileOutputStream outputStream = new FileOutputStream(filePath)) {
 
-        FileOutputStream outputStream = new FileOutputStream(filePath);
-        workBook.write(outputStream);
-        workBook.close();
-        outputStream.close();
-
-        System.out.println("Formula Applied Succesfully");
-
+            XSSFSheet sheet = workBook.getSheetAt(0);
+            // if(CodeHelp.notEmpty(sheetName)){
+            //     sheet = workBook.getSheet(sheetName);
+            // }
+            sheet.getRow(7).getCell(4).setCellFormula("SUM(E2:E5)");
+            workBook.write(outputStream);
+            System.out.println("Formula Applied Succesfully");
+        }
     }
 
     public static void templateBasedFormatting(String filePath, String sheetName, ExcelFormatterTemplateEnum template) throws IOException {
+        try (FileInputStream inputStream = new FileInputStream(filePath);
+             XSSFWorkbook workBook = new XSSFWorkbook(inputStream);
+             InputStream is = new FileInputStream("C:\\code\\dot_workspace\\VLogo.png");
+             FileOutputStream outputStream = new FileOutputStream(filePath)) {
 
-        FileInputStream inputStream = new FileInputStream(filePath);
-        XSSFWorkbook workBook = new XSSFWorkbook(inputStream);
-        readFromExcel(filePath, sheetName);
-        InputStream is = new FileInputStream("C:\\code\\dot_workspace\\VLogo.png");
-        byte[] bytes = IOUtils.toByteArray(is);
-        int pictureIdx = workBook.addPicture(bytes, workBook.PICTURE_TYPE_PNG);
-        System.out.print("Workbook read succesfully!");
-        inputStream.close();
+            readFromExcel(filePath, sheetName);
+            byte[] bytes = IOUtils.toByteArray(is);
+            int pictureIdx = workBook.addPicture(bytes, workBook.PICTURE_TYPE_PNG);
+            System.out.print("Workbook read succesfully!");
 
-        // XSSFWorkbook formattedWorkBook = formatSheet(workBook, sheetName, template);
-        // XSSFCellStyle cellStyle = workBook.createCellStyle();
+            // XSSFWorkbook formattedWorkBook = formatSheet(workBook, sheetName, template);
+            // XSSFCellStyle cellStyle = workBook.createCellStyle();
 
-        // cellStyle.setWrapText(true);
-        // cellStyle.setFillForegroundColor(IndexedColors.RED.index);
-        // cellStyle.setFillBackgroundColor(IndexedColors.RED.index);
-        // cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-        // cellStyle.setAlignment(HorizontalAlignment.RIGHT);
-        // cellStyle.setBottomBorderColor(IndexedColors.BLACK.index);
+            // cellStyle.setWrapText(true);
+            // cellStyle.setFillForegroundColor(IndexedColors.RED.index);
+            // cellStyle.setFillBackgroundColor(IndexedColors.RED.index);
+            // cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+            // cellStyle.setAlignment(HorizontalAlignment.RIGHT);
+            // cellStyle.setBottomBorderColor(IndexedColors.BLACK.index);
 
-        XSSFSheet sheet = workBook.getSheetAt(0);
-        if (CodeHelp.notEmpty(sheetName)) {
-            sheet = workBook.getSheet(sheetName);
+            XSSFSheet sheet = workBook.getSheetAt(0);
+            if (CodeHelp.notEmpty(sheetName)) {
+                sheet = workBook.getSheet(sheetName);
+            }
+            // XSSFRow row = sheet.getRow(2);
+            // row.setRowStyle(cellStyle);
+            // row.setHeightInPoints(30);
+
+            CreationHelper helper = workBook.getCreationHelper();
+            Drawing drawing = sheet.createDrawingPatriarch();
+            ClientAnchor anchor = helper.createClientAnchor();
+
+            anchor.setCol1(1);
+            anchor.setRow1(2);
+            Picture pict = drawing.createPicture(anchor, pictureIdx);
+            pict.resize();
+
+            workBook.write(outputStream);
         }
-        // XSSFRow row = sheet.getRow(2);
-        // row.setRowStyle(cellStyle);
-        // row.setHeightInPoints(30);
-
-        CreationHelper helper = workBook.getCreationHelper();
-        Drawing drawing = sheet.createDrawingPatriarch();
-        ClientAnchor anchor = helper.createClientAnchor();
-
-        anchor.setCol1(1);
-        anchor.setRow1(2);
-        Picture pict = drawing.createPicture(anchor, pictureIdx);
-        pict.resize();
-
-
-        FileOutputStream outputStream = new FileOutputStream(filePath);
-        workBook.write(outputStream);
-        workBook.close();
-        outputStream.close();
     }
 
     // private static XSSFWorkbook formatSheet(XSSFWorkbook workBook, String sheetName, ExcelFormatterTemplateEnum template) {
@@ -194,14 +183,14 @@ public class ExcelUtil {
     // }
 
     public static void csvToXLSX() {
-        try {
-            String csvFileAddress = "C:\\code\\dot_workspace\\28_CSR.csv"; //csv file address
-            String xlsxFileAddress = "C:\\code\\dot_workspace\\fromCSV.xlsx"; //xlsx file address
-            XSSFWorkbook workBook = new XSSFWorkbook();
+        try (XSSFWorkbook workBook = new XSSFWorkbook();
+             BufferedReader bufferedReader = new BufferedReader(new FileReader("C:\\code\\dot_workspace\\28_CSR.csv"));
+             FileOutputStream fileOutputStream = new FileOutputStream("C:\\code\\dot_workspace\\fromCSV.xlsx")) {
+
             XSSFSheet sheet = workBook.createSheet("sheet1");
-            String currentLine = null;
+            String currentLine;
             int RowNum = 0;
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(csvFileAddress));
+
             while ((currentLine = bufferedReader.readLine()) != null) {
                 String[] str = currentLine.split(",");
                 RowNum++;
@@ -210,9 +199,8 @@ public class ExcelUtil {
                     currentRow.createCell(i).setCellValue(str[i]);
                 }
             }
-            FileOutputStream fileOutputStream = new FileOutputStream(xlsxFileAddress);
+
             workBook.write(fileOutputStream);
-            fileOutputStream.close();
             System.out.println("Done");
         } catch (Exception ex) {
             System.out.println(ex.getMessage() + "Exception in try");
@@ -227,7 +215,6 @@ public class ExcelUtil {
         XSSFWorkbook workBook = new XSSFWorkbook();
         XSSFSheet sheet = workBook.createSheet();
 
-        int numOfHeaders = headers.size();
         int cellCount = 0;
         int autoSizeCount = 0;
 

@@ -111,11 +111,11 @@ public class CodeHelp {
 
     }
 
-    public static boolean isEmpty(List list) {
+    public static boolean isEmpty(List<?> list) {
         return !isNotEmpty(list);
     }
 
-    public static boolean isNotEmpty(List list) {
+    public static boolean isNotEmpty(List<?> list) {
         return list != null && list.size() > 0;
     }
 
@@ -127,7 +127,7 @@ public class CodeHelp {
     public static double parseDouble(String str) {
         try {
             if (notEmpty(str)) {
-                str = str.replaceAll("\\$|,|%", "");
+                str = str.replaceAll("[$,%]", "");
                 return Double.parseDouble(str);
             } else {
                 return 0;
@@ -146,7 +146,7 @@ public class CodeHelp {
             return false;
         }
         try {
-            double d = Double.parseDouble(str);
+            Double.parseDouble(str);
         } catch (NumberFormatException nfe) {
             return false;
         }
@@ -179,7 +179,9 @@ public class CodeHelp {
     }
 
     public static void print(Object obj) {
-        logger.info(gson().toJson(obj));
+        if (logger.isInfoEnabled()) {
+            logger.info(gson().toJson(obj));
+        }
     }
 
     public static String toJson(Object obj) {
@@ -510,17 +512,17 @@ public class CodeHelp {
         ZipOutputStream zipOutputStream = new ZipOutputStream(response.getOutputStream());
         // compress the files
         for (int i = 0; i < files.size(); i++) {
-            FileInputStream in = new FileInputStream(files.get(i).getName());
-            // add ZIP entry to output stream
-            zipOutputStream.putNextEntry(new ZipEntry(files.get(i).getName()));
-            // transfer bytes from the file to the ZIP file
-            int len;
-            while ((len = in.read(buf)) > 0) {
-                zipOutputStream.write(buf, 0, len);
+            try (FileInputStream in = new FileInputStream(files.get(i).getName())) {
+                // add ZIP entry to output stream
+                zipOutputStream.putNextEntry(new ZipEntry(files.get(i).getName()));
+                // transfer bytes from the file to the ZIP file
+                int len;
+                while ((len = in.read(buf)) > 0) {
+                    zipOutputStream.write(buf, 0, len);
+                }
+                // complete the entry
+                zipOutputStream.closeEntry();
             }
-            // complete the entry
-            zipOutputStream.closeEntry();
-            in.close();
         }
         // complete the ZIP file
         zipOutputStream.close();
@@ -530,7 +532,7 @@ public class CodeHelp {
      * Replaces &nbsp; by normal whitespaces then trims it
      **/
     public static String trimWhitespaces(String inputString) {
-        if (StringUtils.isEmpty(inputString)) {
+        if (!StringUtils.hasLength(inputString)) {
             return inputString;
         }
         return inputString.replace("\u00a0", " ").trim();

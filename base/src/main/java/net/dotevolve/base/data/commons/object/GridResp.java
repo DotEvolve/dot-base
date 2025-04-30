@@ -6,7 +6,7 @@
  *
  ******************************************************************************/
 
-package net.dotevolve.base.data.commonObjects;
+package net.dotevolve.base.data.commons.object;
 
 import java.util.ArrayList;
 import java.util.HashMap;

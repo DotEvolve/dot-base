@@ -7,6 +7,6 @@ import lombok.Data;
 
 @Data
 public class MergeFileRequest {
-    private List<String> fileIds = new ArrayList();
+    private List<String> fileIds = new ArrayList<>();
     private String contentType;
 }

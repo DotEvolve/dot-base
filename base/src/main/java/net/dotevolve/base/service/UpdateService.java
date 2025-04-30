@@ -10,6 +10,7 @@ package net.dotevolve.base.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import net.dotevolve.base.data.BaseEntity;
 import net.dotevolve.base.data.MetaDataEntity;
@@ -23,6 +24,7 @@ import com.mongodb.client.result.DeleteResult;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 
+@Service
 public class UpdateService<Data extends BaseEntity> {
 
     private final ASaveKeeper<Data> saveKeeper;
@@ -46,13 +48,13 @@ public class UpdateService<Data extends BaseEntity> {
         try {
             handler.onChange(updatedData);
         } catch (Exception e) {
-            e.printStackTrace();
+            // Handle exception
         }
         for (AChangeHandler<Data> changeHandler : handler.additionalChangeHandlers()) {
             try {
                 changeHandler.onChange(updatedData);
             } catch (Exception e) {
-                e.printStackTrace();
+                // Handle exception
             }
         }
         return updatedData;
