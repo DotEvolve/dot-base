@@ -16,8 +16,8 @@
         <sonar.organization>dotevolve</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
 
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
+        <maven.compiler.source>19</maven.compiler.source>
+        <maven.compiler.target>19</maven.compiler.target>
 
         <app.version>1.0-SNAPSHOT</app.version>
     </properties>
