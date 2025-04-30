@@ -8,12 +8,10 @@
 
 package net.dotevolve.base.data.commons.entity;
 
-import lombok.Data;
 import net.dotevolve.base.constants.DEPARTMENT_TYPE;
 import net.dotevolve.base.data.DataRef;
 
-import java.util.ArrayList;
-import java.util.List;
+import lombok.Data;
 
 @Data
 public class TaskDetailEntity {
