@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
 import java.util.StringJoiner;
@@ -56,32 +57,32 @@ import org.apache.logging.log4j.Logger;
 import org.joda.time.DateTimeUtils;
 
 public class CodeHelp {
-    final static String BETWEEN_LOWER_AND_UPPER = "(?<=\\p{Ll})(?=\\p{Lu})";
-    final static String BEFORE_UPPER_AND_LOWER = "(?<=\\p{L})(?=\\p{Lu}\\p{Ll})";
-    final static Pattern SPLIT_CAMEL_CASE = Pattern.compile(BETWEEN_LOWER_AND_UPPER + "|" + BEFORE_UPPER_AND_LOWER);
+    private static final String BETWEEN_LOWER_AND_UPPER = "(?<=\\p{Ll})(?=\\p{Lu})";
+    private static final String BEFORE_UPPER_AND_LOWER = "(?<=\\p{L})(?=\\p{Lu}\\p{Ll})";
+    private static final Pattern SPLIT_CAMEL_CASE = Pattern.compile(BETWEEN_LOWER_AND_UPPER + "|" + BEFORE_UPPER_AND_LOWER);
     private static final Logger logger = LogManager.getLogger(CodeHelp.class);
     DateTimeUtils dateUtil;
 
     public static String splitCamelCase(String input) {
-        String out = "";
+        StringBuilder out = new StringBuilder();
         for (int i = 0; i < input.length(); i++) {
             String c = Character.toString(input.charAt(i));
             if (c.equals(c.toUpperCase())) {
-                out += " ";
+                out.append(" ");
             }
             if (i == 0) {
                 c = c.toUpperCase();
             }
-            out += c;
+            out.append(c);
         }
-        return out;
+        return out.toString();
     }
 
     public static boolean isEmpty(String string) {
         if (string == null) {
             return true;
         }
-        return string.length() == 0;
+        return string.isEmpty();
     }
     // //by Syed
     // public static boolean isEmptyString(List<String> string) {
@@ -116,7 +117,7 @@ public class CodeHelp {
     }
 
     public static boolean isNotEmpty(List<?> list) {
-        return list != null && list.size() > 0;
+        return list != null && !list.isEmpty();
     }
 
     public static Object cloneObject(Object o) {
@@ -275,12 +276,11 @@ public class CodeHelp {
     }
 
     public static String titleCase(String givenString) {
+        if (Objects.equals(givenString, "")) return "";
         String[] arr = givenString.split(" ");
         StringBuilder sb = new StringBuilder();
         for (String s : arr) {
-            if (arr.length > 1) {
-                sb.append(Character.toUpperCase(s.charAt(0))).append(s.substring(1)).append(" ");
-            }
+            sb.append(Character.toUpperCase(s.charAt(0))).append(s.substring(1)).append(" ");
         }
         return sb.toString().trim();
     }
@@ -290,6 +290,8 @@ public class CodeHelp {
             Double.parseDouble(str);
             return true;
         } catch (NumberFormatException e) {
+            return false;
+        } catch (NullPointerException e) {
             return false;
         }
     }
@@ -312,7 +314,7 @@ public class CodeHelp {
         int c1;
         int c2;
         int s1length = s1.length();
-        int s2length = s1.length();
+        int s2length = s2.length();
         for (int i = 0; i < s1length && i < s2length; i++) {
             c1 = s1.toLowerCase().charAt(i); // See note 1
             c2 = s2.toLowerCase().charAt(i); // See note 1
@@ -321,12 +323,7 @@ public class CodeHelp {
             if (comparison != 0) // See note 3
                 return comparison;
         }
-        if (s1length > s2length) // See note 4
-            return 1;
-        else if (s1length < s2length)
-            return -1;
-        else
-            return 0;
+        return Integer.compare(s1length, s2length);
 
     }
 
