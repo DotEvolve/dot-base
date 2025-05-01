@@ -8,8 +8,10 @@
 
 package net.dotevolve.base.constants;
 
+import lombok.Getter;
+
+@Getter
 public enum PROVIDER_ID {
-    MASCOT_FOOTWEAR("mascot-footwear"),
     TEST("123");
 
     private final String value;
@@ -18,7 +20,4 @@ public enum PROVIDER_ID {
         this.value = value;
     }
 
-    public String getValue() {
-        return value;
-    }
 }

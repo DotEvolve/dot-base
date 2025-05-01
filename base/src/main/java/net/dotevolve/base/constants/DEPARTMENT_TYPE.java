@@ -8,28 +8,18 @@
 
 package net.dotevolve.base.constants;
 
+import lombok.Getter;
+
+@Getter
 public enum DEPARTMENT_TYPE {
-    BOTTOM("1", "Bottom"),
-    CUTTING("2", "Cutting"),
-    FINISH("3", "Finish"),
-    PACKAGING("4", "Packaging"),
-    POLISH("5", "Polish"),
-    UPPER("6", "Upper"),
     UNKNOWN("0", "Unknown");
 
-    private String id;
-    private String department;
+    private final String id;
+    private final String department;
 
     DEPARTMENT_TYPE(String id, String department) {
         this.id = id;
         this.department = department;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public String getDepartment() {
-        return department;
-    }
 }

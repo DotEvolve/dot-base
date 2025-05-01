@@ -25,9 +25,12 @@ import org.apache.logging.log4j.Logger;
 
 @Component
 public class GetConfigValuesService {
+
     protected static final Logger logger = LogManager.getLogger(GetConfigValuesService.class);
+
     @Autowired
     RestClient restClient;
+
     Map<ConfigEnum, Map<String, Object>> valueMap = new HashMap<>();
 
     @EventListener(ApplicationReadyEvent.class)
