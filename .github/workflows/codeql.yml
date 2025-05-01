@@ -16,6 +16,8 @@ on:
     branches: [ "dev" ]
   pull_request:
     branches: [ "dev" ]
+    branches-ignore:
+      - '**/dependabot/**'
   schedule:
     - cron: '15 5 * * 5'
 
