@@ -9,7 +9,7 @@
 package net.dotevolve.base.utils;
 
 import java.io.IOException;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -27,11 +27,11 @@ public class CsvToMap {
     }
 
     public static List<Map<String, String>> read(ByteArrayResource src) throws IOException {
-        List<Map<String, String>> response = new LinkedList<>();
+        List<Map<String, String>> response = new ArrayList<>();
         CsvMapper mapper = new CsvMapper();
         mapper.enable(CsvParser.Feature.IGNORE_TRAILING_UNMAPPABLE);
         CsvSchema schema = CsvSchema.emptySchema().withHeader();
-        MappingIterator<Map<String, String>> iterator = mapper.reader(Map.class).with(schema)
+        MappingIterator<Map<String, String>> iterator = mapper.readerFor(Map.class).with(schema)
                 .readValues(src.getInputStream());
         while (iterator.hasNext()) {
             response.add(iterator.next());
