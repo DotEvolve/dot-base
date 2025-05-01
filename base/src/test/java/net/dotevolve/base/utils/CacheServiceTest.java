@@ -13,7 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-public class CacheServiceTest {
+class CacheServiceTest {
 
     @Mock
     private CacheManager cacheManager;
