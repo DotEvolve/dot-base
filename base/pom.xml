@@ -63,6 +63,10 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring.boot.version}</version>
+                <configuration>
+                    <jvmArguments>-Xshare:off</jvmArguments>
+                </configuration>
                 <executions>
                     <execution>
                         <goals>
@@ -87,11 +91,12 @@
                     <reportsDirectory>target/surefire-reports</reportsDirectory>
                     <failIfNoTests>true</failIfNoTests>
                     <testFailureIgnore>true</testFailureIgnore>
-                    <argLine>
+                    <argLine>@{argLine}
                         --add-opens java.base/java.lang=ALL-UNNAMED
                         --add-opens java.base/java.util=ALL-UNNAMED
                         --add-opens java.base/java.io=ALL-UNNAMED
                         -Dspring.profiles.active=test
+                        -Xshare:off
                     </argLine>
                 </configuration>
             </plugin>
@@ -119,7 +124,7 @@
                     </execution>
                     <execution>
                         <id>report</id>
-                        <phase>prepare-package</phase>
+                        <phase>post-integration-test</phase>
                         <goals>
                             <goal>report</goal>
                         </goals>

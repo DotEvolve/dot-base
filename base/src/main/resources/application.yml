@@ -9,3 +9,4 @@
 #ribbon:
 #  eureka:
 #    enabled: true
+java.args=-Xshare:off
