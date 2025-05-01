@@ -34,7 +34,7 @@ public class DateUtil {
         return newFormatter.print(temp);
     }
 
-    public String convertFormatWtihUTCFormat(String dateTime, DateTimeFormatEnum oldFormat,
+    public String convertFormatWithUTCFormat(String dateTime, DateTimeFormatEnum oldFormat,
                                              DateTimeFormatEnum newFormat) {
         DateTimeFormatter oldFormatter = DateTimeFormat.forPattern(oldFormat.toString());
         DateTime temp = oldFormatter.parseDateTime(dateTime);

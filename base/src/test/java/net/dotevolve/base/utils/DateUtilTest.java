@@ -68,12 +68,12 @@ public class DateUtilTest {
     }
 
     @Test
-    public void testConvertFormatWtihUTCFormat() {
+    public void testConvertFormatWithUTCFormat() {
         // Arrange
         String originalDateTime = "2023-05-15T10:30:00+0000";
 
         // Act
-        String convertedDateTime = dateUtil.convertFormatWtihUTCFormat(
+        String convertedDateTime = dateUtil.convertFormatWithUTCFormat(
             originalDateTime, 
             DateTimeFormatEnum.FULL_DATE_TIME, 
             DateTimeFormatEnum.FULL_DATE_TIME_ISO_MS
