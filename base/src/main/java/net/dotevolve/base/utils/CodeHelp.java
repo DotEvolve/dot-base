@@ -15,6 +15,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
@@ -22,7 +23,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
-import java.util.Currency;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -54,14 +55,11 @@ import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.joda.time.DateTimeUtils;
 
 public class CodeHelp {
-    private static final String BETWEEN_LOWER_AND_UPPER = "(?<=\\p{Ll})(?=\\p{Lu})";
-    private static final String BEFORE_UPPER_AND_LOWER = "(?<=\\p{L})(?=\\p{Lu}\\p{Ll})";
-    private static final Pattern SPLIT_CAMEL_CASE = Pattern.compile(BETWEEN_LOWER_AND_UPPER + "|" + BEFORE_UPPER_AND_LOWER);
     private static final Logger logger = LogManager.getLogger(CodeHelp.class);
-    DateTimeUtils dateUtil;
+
+    private CodeHelp() {}
 
     public static String splitCamelCase(String input) {
         StringBuilder out = new StringBuilder();
@@ -84,20 +82,11 @@ public class CodeHelp {
         }
         return string.isEmpty();
     }
-    // //by Syed
-    // public static boolean isEmptyString(List<String> string) {
-    // return string == null ? true : string.isEmpty();
-    // }
 
     public static boolean notEmpty(String string) {
         return !isEmpty(string);
     }
-    // BySyed
-    // public static boolean notEmpty(List<String> string) {
-    // return !isEmptyString(List<String> string);
-    // }
 
-    // By Syed
     public static String USDNumberFormatting(int value) {
         DecimalFormat df = new DecimalFormat("###,###,###");
         return df.format(value);
@@ -212,14 +201,14 @@ public class CodeHelp {
         return toJson(obj).equals("{}");
     }
 
-    public static List getListFromIterator(Iterator<Object> iterator) {
-        List list = new ArrayList<>();
+    public static List<Object> getListFromIterator(Iterator<Object> iterator) {
+        List<Object> list = new ArrayList<>();
         iterator.forEachRemaining(list::add);
         return list;
     }
 
     public static Map<String, Object> getMapFromJson(String json) {
-        return (Map<String, Object>) gson().fromJson(json, Map.class);
+        return gson().fromJson(json, Map.class);
     }
 
     public static String getJsonFromMap(Map<String, Object> map) {
@@ -233,16 +222,16 @@ public class CodeHelp {
 
     public static String generateId(String... ids) {
         int index = 0;
-        String returnId = "";
+        StringBuilder returnId = new StringBuilder();
         while (index < ids.length) {
             if (index == 0) {
-                returnId = ids[index].toLowerCase().trim();
+                returnId = new StringBuilder(ids[index].toLowerCase().trim());
             } else {
-                returnId = returnId + "@" + ids[index].toLowerCase().trim();
+                returnId.append("@").append(ids[index].toLowerCase().trim());
             }
             index++;
         }
-        return returnId;
+        return returnId.toString();
 
     }
 
@@ -289,9 +278,7 @@ public class CodeHelp {
         try {
             Double.parseDouble(str);
             return true;
-        } catch (NumberFormatException e) {
-            return false;
-        } catch (NullPointerException e) {
+        } catch (NullPointerException | NumberFormatException e) {
             return false;
         }
     }
@@ -335,7 +322,7 @@ public class CodeHelp {
     }
 
     public static String toUrlEncodeJson(Object obj) throws UnsupportedEncodingException {
-        return URLEncoder.encode(CodeHelp.toJson(obj), "UTF-8");
+        return URLEncoder.encode(CodeHelp.toJson(obj), StandardCharsets.UTF_8);
     }
 
     public static String epochSecondsToDateString(long unixSeconds, String dateFormat) {
@@ -390,11 +377,13 @@ public class CodeHelp {
             toDate = CodeHelp.parseISOmillisecondsDateString(date);
         } catch (ParseException e) {
             toDate = new Date();
-            e.printStackTrace();
         }
-        toDate.setHours(23);
-        toDate.setMinutes(59);
-        toDate.setSeconds(59);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(toDate);
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        toDate = calendar.getTime();
         return toDate;
     }
 
@@ -408,9 +397,8 @@ public class CodeHelp {
         if (gpaScale.equals(0.0)) {
             gpaScale = 4.00;
         }
-        Double gpaNormalized = (gpaScore * 4 / gpaScale);
 
-        return gpaNormalized;
+        return gpaScore * 4.0 / gpaScale;
     }
 
     public static Boolean parseResponseAsBoolean(String responseText) {
@@ -494,9 +482,9 @@ public class CodeHelp {
         int remainder = (int) (exactAmount % 100);
         int quotient = (int) (exactAmount / 100);
         if (remainder > 0) {
-            return (quotient + 1) * 100;
+            return (quotient + 1) * 100.0;
         }
-        return quotient * 100;
+        return quotient * 100.0;
     }
 
     public static void filesToZip(HttpServletResponse response, List<File> files, String zipFileName)
@@ -508,10 +496,10 @@ public class CodeHelp {
         // create the ZIP file
         ZipOutputStream zipOutputStream = new ZipOutputStream(response.getOutputStream());
         // compress the files
-        for (int i = 0; i < files.size(); i++) {
-            try (FileInputStream in = new FileInputStream(files.get(i).getName())) {
+        for (File file : files) {
+            try (FileInputStream in = new FileInputStream(file.getName())) {
                 // add ZIP entry to output stream
-                zipOutputStream.putNextEntry(new ZipEntry(files.get(i).getName()));
+                zipOutputStream.putNextEntry(new ZipEntry(file.getName()));
                 // transfer bytes from the file to the ZIP file
                 int len;
                 while ((len = in.read(buf)) > 0) {
@@ -542,7 +530,7 @@ public class CodeHelp {
     public static double sanitizeAsDouble(String valueToBeSanitized) {
         double sanitizedValue = 0;
         try {
-            sanitizedValue = Double.valueOf(valueToBeSanitized);
+            sanitizedValue = Double.parseDouble(valueToBeSanitized);
         } catch (Exception e) {
             logger.error("Error while sanitizing value as double", e);
         }
@@ -555,7 +543,7 @@ public class CodeHelp {
             if (elem.getValue().compareTo(" ") == 0) {
                 elem.setValue("");
             }
-            if (elem.getValue().matches("^(\\d{1,3}(\\,\\d{3})*|(\\d+))(\\.\\d{2})?$")) {
+            if (elem.getValue().matches("^(\\d{1,3}(,\\d{3})*|(\\d+))(\\.\\d{2})?$")) {
                 elem.setValue(elem.getValue().replace(",", ""));
             }
             if (elem.getValue().compareTo("NULL") == 0 || elem.getValue().compareTo("Null") == 0
@@ -569,8 +557,6 @@ public class CodeHelp {
 
     public static String usCurrencyFormat(String value) {
         Locale usa = new Locale("en", "US");
-        // Create a Currency instance for the Locale
-        Currency dollars = Currency.getInstance(usa);
         // Create a formatter given the Locale
         NumberFormat dollarFormat = NumberFormat.getCurrencyInstance(usa);
         dollarFormat.setMaximumFractionDigits(0);

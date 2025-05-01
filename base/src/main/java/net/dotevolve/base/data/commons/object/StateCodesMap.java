@@ -11,7 +11,7 @@ import org.springframework.util.StringUtils;
 @Component
 public class StateCodesMap {
 
-    private final Map<String, String> stateCodeToStateNameMap = new HashMap<String, String>();
+    private final Map<String, String> stateCodeToStateNameMap = new HashMap<>();
     private final Map<String, String> fipsCodeToStateCodeMap = new HashMap<>();
 
     @PostConstruct
