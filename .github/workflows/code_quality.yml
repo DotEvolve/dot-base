@@ -8,6 +8,8 @@ on:
       - master # The 'main' branch
       - dev
       - 'releases/*' # The release branches
+    branches-ignore:
+      - '**/dependabot/**'
 
 jobs:
   qodana:

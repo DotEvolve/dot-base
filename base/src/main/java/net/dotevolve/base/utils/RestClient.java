@@ -16,6 +16,7 @@ import javax.net.ssl.X509TrustManager;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
+import java.util.Arrays;
 import java.util.Base64;
 
 import org.springframework.http.HttpEntity;
@@ -41,7 +42,7 @@ public class RestClient {
 
     @PostConstruct
     void init() {
-        disableCertificateVerification();
+        //disableCertificateVerification();
         this.rest = new RestTemplate();
         this.headers = addDefaultHeaders();
 
@@ -92,7 +93,7 @@ public class RestClient {
         String plainCreds = String.format(S_S, username, password);
         byte[] plainCredsBytes = plainCreds.getBytes();
         byte[] base64CredsBytes = Base64.getEncoder().encode(plainCredsBytes);
-        String base64Creds = new String(base64CredsBytes);
+        String base64Creds = Arrays.toString(base64CredsBytes);
         HttpHeaders headers = addDefaultHeaders();
         headers.add(AUTHORIZATION, BASIC + base64Creds);
         HttpEntity<String> requestEntity = new HttpEntity<>(json, headers);
@@ -112,7 +113,7 @@ public class RestClient {
         String plainCreds = String.format(S_S, username, password);
         byte[] plainCredsBytes = plainCreds.getBytes();
         byte[] base64CredsBytes = Base64.getEncoder().encode(plainCredsBytes);
-        String base64Creds = new String(base64CredsBytes);
+        String base64Creds = Arrays.toString(base64CredsBytes);
         HttpHeaders headers = addDefaultHeaders();
         headers.add(AUTHORIZATION, BASIC + base64Creds);
         HttpEntity<String> requestEntity = new HttpEntity<>(json, headers);
@@ -130,7 +131,7 @@ public class RestClient {
         String plainCreds = String.format(S_S, username, password);
         byte[] plainCredsBytes = plainCreds.getBytes();
         byte[] base64CredsBytes = Base64.getEncoder().encode(plainCredsBytes);
-        String base64Creds = new String(base64CredsBytes);
+        String base64Creds = Arrays.toString(base64CredsBytes);
         HttpHeaders headers = addDefaultHeaders();
         headers.add(AUTHORIZATION, BASIC + base64Creds);
         HttpEntity<String> requestEntity = new HttpEntity<>(json, headers);
@@ -142,7 +143,7 @@ public class RestClient {
         String plainCreds = String.format(S_S, username, password);
         byte[] plainCredsBytes = plainCreds.getBytes();
         byte[] base64CredsBytes = Base64.getEncoder().encode(plainCredsBytes);
-        String base64Creds = new String(base64CredsBytes);
+        String base64Creds = Arrays.toString(base64CredsBytes);
         HttpHeaders headers = addDefaultHeaders();
         headers.add(AUTHORIZATION, BASIC + base64Creds);
         HttpEntity<String> requestEntity = new HttpEntity<>("", headers);

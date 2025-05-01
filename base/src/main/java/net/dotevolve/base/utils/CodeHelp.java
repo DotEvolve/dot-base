@@ -194,7 +194,7 @@ public class CodeHelp {
 
     public static String decode64Bit(String dataIn64Bit) {
         byte[] decodedBytes = Base64.getDecoder().decode(dataIn64Bit);
-        return new String(decodedBytes);
+        return Arrays.toString(decodedBytes);
     }
 
     public static String getAppBaseUrl(String contaxtPath) {
@@ -276,10 +276,10 @@ public class CodeHelp {
 
     public static String titleCase(String givenString) {
         String[] arr = givenString.split(" ");
-        StringBuffer sb = new StringBuffer();
-        for (int i = 0; i < arr.length; i++) {
+        StringBuilder sb = new StringBuilder();
+        for (String s : arr) {
             if (arr.length > 1) {
-                sb.append(Character.toUpperCase(arr[i].charAt(0))).append(arr[i].substring(1)).append(" ");
+                sb.append(Character.toUpperCase(s.charAt(0))).append(s.substring(1)).append(" ");
             }
         }
         return sb.toString().trim();
