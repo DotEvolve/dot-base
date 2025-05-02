@@ -42,9 +42,6 @@
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
                     <version>${spring.boot.version}</version>
-                    <configuration>
-                        <jvmArguments>-Xshare:off</jvmArguments>
-                    </configuration>
                     <executions>
                         <execution>
                             <goals>
@@ -74,7 +71,6 @@
                             --add-opens java.base/java.util=ALL-UNNAMED
                             --add-opens java.base/java.io=ALL-UNNAMED
                             -Dspring.profiles.active=test
-                            -Xshare:off
                         </argLine>
                     </configuration>
                 </plugin>
