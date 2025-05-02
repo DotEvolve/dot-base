@@ -53,11 +53,13 @@ public abstract class AMongoDatabaseStore<Data extends BaseEntity, CollectionInf
         implements IDatabaseStore<Data> {
     @Autowired
     CollectionInfo collectionInfo;
+
     @Autowired
     @Qualifier("primaryMongoTemplate")
     MongoTemplate primaryMongoTemplate;
+
     @Autowired
-    CacheService cacheService;
+    CacheService<Data> cacheService;
 
     @Override
     public boolean cacheEnable() {
@@ -76,13 +78,13 @@ public abstract class AMongoDatabaseStore<Data extends BaseEntity, CollectionInf
     @Override
     public Data get(String id) {
         if (cacheEnable() && cacheService.exists(id, collectionInfo.getName())) {
-            return (Data) cacheService.get(id, collectionInfo.getName()).get();
+            return cacheService.get(id, collectionInfo.getName()).get();
         }
         BasicDBObject data = primaryMongoTemplate.findOne(Query.query(Criteria.where("_id").is(id)),
                 BasicDBObject.class, collectionInfo.getName());
         CodeCondition.validate(data != null, "Data not available on id = " + id, id);
         if (cacheEnable()) {
-            return (Data) cacheService.save(id, collectionInfo.getType(data.toJson()), collectionInfo.getName());
+            return cacheService.save(id, collectionInfo.getType(data.toJson()), collectionInfo.getName());
         }
         return collectionInfo.getType(data.toJson());
     }
@@ -159,10 +161,9 @@ public abstract class AMongoDatabaseStore<Data extends BaseEntity, CollectionInf
             Document document = Document.parse(CodeHelp.toJson(data));
             documents.add(document);
         }
-        InsertManyResult insertManyResult = primaryMongoTemplate.getCollection(collectionInfo.getName())
-                .insertMany(documents);
 
-        return insertManyResult;
+        return primaryMongoTemplate.getCollection(collectionInfo.getName())
+                .insertMany(documents);
     }
 
     @Override
@@ -190,9 +191,7 @@ public abstract class AMongoDatabaseStore<Data extends BaseEntity, CollectionInf
             writes.add(writeModel);
         }
 
-        BulkWriteResult bulkWriteResult = collection.bulkWrite(writes);
-
-        return bulkWriteResult;
+        return collection.bulkWrite(writes);
 
     }
 

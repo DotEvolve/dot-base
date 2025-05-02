@@ -13,7 +13,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
@@ -321,7 +320,7 @@ public class CodeHelp {
         return sw.toString();
     }
 
-    public static String toUrlEncodeJson(Object obj) throws UnsupportedEncodingException {
+    public static String toUrlEncodeJson(Object obj) {
         return URLEncoder.encode(CodeHelp.toJson(obj), StandardCharsets.UTF_8);
     }
 

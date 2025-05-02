@@ -44,3 +44,6 @@ bin/
 
 ### Maven ###
 /base/target/
+
+#Ignore vscode AI rules
+.github/copilot-instructions.md
