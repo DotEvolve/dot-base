@@ -8,10 +8,12 @@
 package net.dotevolve.base.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import net.dotevolve.base.data.BaseEntity;
 import net.dotevolve.base.structure.IDatabaseStore;
 
+@Service
 public class GetService<Data extends BaseEntity> {
 
     IDatabaseStore<Data> store;
