@@ -7,7 +7,12 @@ import net.dotevolve.base.data.BaseEntityReq;
 import net.dotevolve.base.utils.CacheService;
 import net.dotevolve.base.utils.CodeHelp;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class CachedSearchService<Data extends BaseEntity, SReq extends BaseEntityReq> {
+
+    private static final Logger logger = LogManager.getLogger(CachedSearchService.class);
 
     private final SearchService<Data, SReq> searchService;
 
@@ -23,7 +28,12 @@ public class CachedSearchService<Data extends BaseEntity, SReq extends BaseEntit
             return (List<Data>) cacheService.get(CodeHelp.toJson(request), request.getClass().getSimpleName()).get();
         }
         List<Data> resp = searchService.search(request);
-        cacheService.save(CodeHelp.toJson(request), (Data) resp, request.getClass().getSimpleName());
+        if (!resp.isEmpty()) {
+            cacheService.save(CodeHelp.toJson(request), resp.get(0), request.getClass().getSimpleName());
+        } else {
+            // Handle the case where the list is empty (e.g., log a warning)
+            logger.info("No data found for request {}", request);
+        }
         return resp;
     }
 }
