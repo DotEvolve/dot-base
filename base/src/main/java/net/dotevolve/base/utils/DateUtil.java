@@ -52,7 +52,7 @@ public class DateUtil {
         return formatter.print(dt);
     }
 
-    public Pair<Long, Long> substractDayFromCurrentDateWithStartAndEndTime(int day) {
+    public Pair<Long, Long> subtractDayFromCurrentDateWithStartAndEndTime(int day) {
         return Pair.of(DateTime.now().minusDays(day).millisOfDay().withMaximumValue().getMillis(),
                 DateTime.now().minusDays(day).millisOfDay().withMinimumValue().getMillis());
     }

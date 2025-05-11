@@ -23,7 +23,7 @@ import freemarker.template.TemplateExceptionHandler;
 @Component
 public class FtlToHtmlConversion {
     public static String loadFtlHtml(File baseDir, String fileName, Map globalMap) {
-        if (baseDir == null || !baseDir.isDirectory() || globalMap == null || fileName == null || "".equals(fileName)) {
+        if (baseDir == null || !baseDir.isDirectory() || globalMap == null || fileName == null || fileName.isEmpty()) {
             throw new IllegalArgumentException("Directory file");
         }
 

@@ -104,9 +104,9 @@ public class MailService {
      * @param file     : file on server
      * @param fileName : custom file name that you want to on email content
      *
-     * @return
+     * @return : NotificationDelivery delivery
      *
-     * @apiNote Send email with single attachment , Only 25 MB file can sent through
+     * @apiNote Send email with single attachment , Only 25 MB file can be sent through
      * email
      */
     public NotificationDelivery sendSimpleMessage(String to, String subject, String body, File file, String fileName) {

@@ -26,7 +26,7 @@ public class EfcToPellGrantConverterService {
     MongoTemplate mongoTemplate;
 
     public double convertToPellGrant2022(double efc, String studentEnrollmentStatus) {
-        Double pellGrantValue = 0d;
+        double pellGrantValue = 0d;
         int coa = 6895;
         Query query = new Query();
         String field = null;
@@ -46,13 +46,13 @@ public class EfcToPellGrantConverterService {
             }
         }
         if (field != null) {
-            pellGrantValue = Double.valueOf(doc.get(field).toString()).doubleValue();
+            pellGrantValue = Double.parseDouble(doc.get(field).toString());
         }
         return pellGrantValue;
     }
 
     public double convertToPellGrant2021(double efc, String studentEnrollmentStatus) {
-        Double pellGrantValue = 0d;
+        double pellGrantValue = 0d;
         int coa = 6495;
         Query query = new Query();
         String field = null;
@@ -72,7 +72,7 @@ public class EfcToPellGrantConverterService {
             }
         }
         if (field != null) {
-            pellGrantValue = Double.valueOf(doc.get(field).toString()).doubleValue();
+            pellGrantValue = Double.parseDouble(doc.get(field).toString());
         }
         return pellGrantValue;
     }

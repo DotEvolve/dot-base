@@ -41,7 +41,7 @@ public class ConversionUtilsTest {
         double result = conversionUtils.sat2act(satScore, actScore);
 
         // Assert
-        assertEquals(36, result, 0.001); // Should convert to highest ACT score (36)
+        assertEquals(36, result, 0.001); // Should convert to the highest ACT score (36)
     }
 
     @Test
@@ -119,7 +119,7 @@ public class ConversionUtilsTest {
         double result = conversionUtils.clt2act(cltScore, actScore);
 
         // Assert
-        assertEquals(36, result, 0.001); // Should convert to highest ACT score (36)
+        assertEquals(36, result, 0.001); // Should convert to the highest ACT score (36)
     }
 
     @Test
@@ -208,7 +208,7 @@ public class ConversionUtilsTest {
         double result = conversionUtils.actToSat(actScore);
 
         // Assert
-        assertEquals(1590, result, 0.001); // Should convert to highest SAT score range
+        assertEquals(1590, result, 0.001); // Should convert to the highest SAT score range
     }
 
     @Test

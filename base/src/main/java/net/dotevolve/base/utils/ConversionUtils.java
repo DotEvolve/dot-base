@@ -3,13 +3,10 @@ package net.dotevolve.base.utils;
 import java.time.LocalDate;
 import java.time.Period;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ConversionUtils {
-    @Autowired
-    DateUtil dateUtil;
 
     public double sat2act(double sat_composite, double act_composite) {
         int converted_act_composite = 0;

@@ -206,7 +206,7 @@ public class CodeHelp {
         return list;
     }
 
-    public static Map<String, Object> getMapFromJson(String json) {
+    public static Map getMapFromJson(String json) {
         return gson().fromJson(json, Map.class);
     }
 
@@ -239,7 +239,7 @@ public class CodeHelp {
     }
 
     public static String removeRepeatedWords(String str) {
-        return new LinkedHashSet<String>(Arrays.asList(str.split("\\s+"))).toString().replaceAll("[\\[\\],]", "");
+        return new LinkedHashSet<>(Arrays.asList(str.split("\\s+"))).toString().replaceAll("[\\[\\],]", "");
 
     }
 
@@ -283,7 +283,7 @@ public class CodeHelp {
     }
 
     public static boolean isArrayContainElement(int[] Array, int element) {
-        // code for ---if a element is present in a array
+        // code for ---if an element is present in an array
         for (int x : Array) {
             if (x == element)
                 return true;

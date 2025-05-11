@@ -8,9 +8,12 @@ import java.util.Map.Entry;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import lombok.Getter;
+
 @Component
 public class StateCodesMap {
 
+    @Getter
     private final Map<String, String> stateCodeToStateNameMap = new HashMap<>();
     private final Map<String, String> fipsCodeToStateCodeMap = new HashMap<>();
 
@@ -22,7 +25,6 @@ public class StateCodesMap {
         stateCodeToStateNameMap.put("az", "Arizona");
         stateCodeToStateNameMap.put("ar", "Arkansas");
         stateCodeToStateNameMap.put("ca", "California");
-        // stateCodeToStateNameMap.put("", "Canada and Canadian Provinces");
         stateCodeToStateNameMap.put("co", "Colorado");
         stateCodeToStateNameMap.put("ct", "Connecticut");
         stateCodeToStateNameMap.put("de", "Delaware");
@@ -40,10 +42,9 @@ public class StateCodesMap {
         stateCodeToStateNameMap.put("ky", "Kentucky");
         stateCodeToStateNameMap.put("la", "Louisiana");
         stateCodeToStateNameMap.put("me", "Maine");
-        stateCodeToStateNameMap.put("mh", "Marshall Islands"); // Freely assosciated state (mh) befgore(ml)
+        stateCodeToStateNameMap.put("mh", "Marshall Islands"); // Freely associated state (mh), earlier(ml)
         stateCodeToStateNameMap.put("md", "Maryland");
         stateCodeToStateNameMap.put("ma", "Massachusetts");
-        // stateCodeToStateNameMap.put("", "Mexico");
         stateCodeToStateNameMap.put("mi", "Michigan");
         stateCodeToStateNameMap.put("mn", "Minnesota");
         stateCodeToStateNameMap.put("ms", "Mississippi");
@@ -188,7 +189,4 @@ public class StateCodesMap {
         return stateCodeToStateNameMap.containsKey(inputStateCode.toLowerCase());
     }
 
-    public Map<String, String> getStateCodeToStateNameMap() {
-        return stateCodeToStateNameMap;
-    }
 }
