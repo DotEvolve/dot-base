@@ -8,6 +8,9 @@
 
 package net.dotevolve.base.constants;
 
+import lombok.Getter;
+
+@Getter
 public enum FIELD_NO {
 
     ID(10, "id"),
@@ -88,11 +91,4 @@ public enum FIELD_NO {
         this.value = value;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public String getValue() {
-        return value;
-    }
 }

@@ -11,7 +11,6 @@ package net.dotevolve.base.utils;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -73,7 +72,7 @@ public class CodeHelpTest {
         assertTrue(CodeHelp.isEmpty(new ArrayList<>()));
         
         // Test with non-empty list
-        assertFalse(CodeHelp.isEmpty(Arrays.asList("item")));
+        assertFalse(CodeHelp.isEmpty(List.of("item")));
     }
 
     @Test
@@ -85,7 +84,7 @@ public class CodeHelpTest {
         assertFalse(CodeHelp.isNotEmpty(new ArrayList<>()));
         
         // Test with non-empty list
-        assertTrue(CodeHelp.isNotEmpty(Arrays.asList("item")));
+        assertTrue(CodeHelp.isNotEmpty(List.of("item")));
     }
 
     @Test

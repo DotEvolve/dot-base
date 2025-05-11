@@ -90,8 +90,7 @@ public class UpdateService<Data extends BaseEntity> {
     }
 
     public DeleteResult deleteMany(List<Data> data) {
-        DeleteResult result = store.deleteMany(data);
-        return result;
+        return store.deleteMany(data);
     }
 
 }

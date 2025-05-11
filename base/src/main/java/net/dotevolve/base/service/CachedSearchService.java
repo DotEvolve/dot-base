@@ -11,9 +11,9 @@ public class CachedSearchService<Data extends BaseEntity, SReq extends BaseEntit
 
     private final SearchService<Data, SReq> searchService;
 
-    private final CacheService cacheService;
+    private final CacheService<Data> cacheService;
 
-    public CachedSearchService(SearchService<Data, SReq> searchService, CacheService cacheService) {
+    public CachedSearchService(SearchService<Data, SReq> searchService, CacheService<Data> cacheService) {
         this.searchService = searchService;
         this.cacheService = cacheService;
     }

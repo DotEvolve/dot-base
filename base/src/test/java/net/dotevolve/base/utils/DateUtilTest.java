@@ -113,11 +113,11 @@ public class DateUtilTest {
     }
 
     @Test
-    public void testSubstractDayFromCurrentDateWithStartAndEndTime() {
+    public void testSubtractDayFromCurrentDateWithStartAndEndTime() {
         // Arrange - already done in setUp()
 
         // Act
-        Pair<Long, Long> result = dateUtil.substractDayFromCurrentDateWithStartAndEndTime(1);
+        Pair<Long, Long> result = dateUtil.subtractDayFromCurrentDateWithStartAndEndTime(1);
 
         // Assert
         DateTime yesterday = new DateTime(2023, 5, 14, 0, 0, 0);

@@ -17,7 +17,7 @@ import com.google.common.collect.Maps;
 
 public class AccessRoleMap {
 
-    private static Map<String, String> roleMap = Maps.newHashMap();
+    private static final Map<String, String> roleMap = Maps.newHashMap();
 
     static {
         roleMap.put("ROLE_USER", "User");

@@ -8,6 +8,9 @@
 
 package net.dotevolve.base.constants;
 
+import lombok.Getter;
+
+@Getter
 public enum FIELD_TYPE {
     TEXT("text"),
     NUMBER("number"),
@@ -37,7 +40,4 @@ public enum FIELD_TYPE {
         this.value = value;
     }
 
-    public String getValue() {
-        return value;
-    }
 }

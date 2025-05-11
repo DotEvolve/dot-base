@@ -38,7 +38,7 @@ public class RestClientTest {
     @Mock
     private RestTemplate restTemplate;
 
-    private final String TEST_URI = "http://test.com/api";
+    private final String TEST_URI = "https://test.com/api";
     private final String TEST_RESPONSE = "{\"key\":\"value\"}";
     private final String TEST_REQUEST = "{\"request\":\"data\"}";
     private final String TEST_USERNAME = "username";

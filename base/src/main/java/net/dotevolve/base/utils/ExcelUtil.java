@@ -18,14 +18,18 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.compress.utils.IOUtils;
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.ClientAnchor;
 import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.Drawing;
 import org.apache.poi.ss.usermodel.Picture;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFShape;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -41,10 +45,9 @@ public class ExcelUtil {
                 sheet = workBook.getSheet(sheetName); //get sheet by name
             }
 
-            Iterator iterator = sheet.iterator();
-            while (iterator.hasNext()) {
-                XSSFRow row = (XSSFRow) iterator.next();
-                Iterator cellIterator = row.cellIterator();
+            for (Row cells : sheet) {
+                XSSFRow row = (XSSFRow) cells;
+                Iterator<Cell> cellIterator = row.cellIterator();
 
                 while (cellIterator.hasNext()) {
                     XSSFCell cell = (XSSFCell) cellIterator.next();
@@ -101,7 +104,7 @@ public class ExcelUtil {
                 }
             }
             workBook.write(outputStream);
-            System.out.printf("File [ %s ]written succesfully!!%n", destinationPathWithFileName);
+            System.out.printf("File [ %s ]written successfully!!%n", destinationPathWithFileName);
         }
     }
 
@@ -119,7 +122,7 @@ public class ExcelUtil {
             // }
             sheet.getRow(7).getCell(4).setCellFormula("SUM(E2:E5)");
             workBook.write(outputStream);
-            System.out.println("Formula Applied Succesfully");
+            System.out.println("Formula Applied Successfully");
         }
     }
 
@@ -131,8 +134,8 @@ public class ExcelUtil {
 
             readFromExcel(filePath, sheetName);
             byte[] bytes = IOUtils.toByteArray(is);
-            int pictureIdx = workBook.addPicture(bytes, workBook.PICTURE_TYPE_PNG);
-            System.out.print("Workbook read succesfully!");
+            int pictureIdx = workBook.addPicture(bytes, Workbook.PICTURE_TYPE_PNG);
+            System.out.print("Workbook read successfully!");
 
             // XSSFWorkbook formattedWorkBook = formatSheet(workBook, sheetName, template);
             // XSSFCellStyle cellStyle = workBook.createCellStyle();
@@ -153,7 +156,7 @@ public class ExcelUtil {
             // row.setHeightInPoints(30);
 
             CreationHelper helper = workBook.getCreationHelper();
-            Drawing drawing = sheet.createDrawingPatriarch();
+            Drawing<XSSFShape> drawing = sheet.createDrawingPatriarch();
             ClientAnchor anchor = helper.createClientAnchor();
 
             anchor.setCol1(1);
@@ -205,10 +208,6 @@ public class ExcelUtil {
         } catch (Exception ex) {
             System.out.println(ex.getMessage() + "Exception in try");
         }
-    }
-
-    public static void XLSXTocsv() {
-        //need to code
     }
 
     public XSSFWorkbook setHeaderRow(List<String> headers) {
