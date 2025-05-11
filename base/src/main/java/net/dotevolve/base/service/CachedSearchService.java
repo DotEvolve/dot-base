@@ -23,7 +23,7 @@ public class CachedSearchService<Data extends BaseEntity, SReq extends BaseEntit
             return (List<Data>) cacheService.get(CodeHelp.toJson(request), request.getClass().getSimpleName()).get();
         }
         List<Data> resp = searchService.search(request);
-        cacheService.save(CodeHelp.toJson(request), resp, request.getClass().getSimpleName());
+        cacheService.save(CodeHelp.toJson(request), (Data) resp, request.getClass().getSimpleName());
         return resp;
     }
 }
