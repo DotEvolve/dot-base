@@ -38,7 +38,7 @@ public class ConversionUtilsTest {
         double actScore = 0;    // No existing ACT score
 
         // Act
-        double result = conversionUtils.sat2act(satScore, actScore);
+        double result = conversionUtils.satToAct(satScore, actScore);
 
         // Assert
         assertEquals(36, result, 0.001); // Should convert to the highest ACT score (36)
@@ -51,7 +51,7 @@ public class ConversionUtilsTest {
         double actScore = 0;    // No existing ACT score
 
         // Act
-        double result = conversionUtils.sat2act(satScore, actScore);
+        double result = conversionUtils.satToAct(satScore, actScore);
 
         // Assert
         assertEquals(25, result, 0.001); // Should convert to corresponding ACT score
@@ -64,7 +64,7 @@ public class ConversionUtilsTest {
         double actScore = 0;   // No existing ACT score
 
         // Act
-        double result = conversionUtils.sat2act(satScore, actScore);
+        double result = conversionUtils.satToAct(satScore, actScore);
 
         // Assert
         assertEquals(9, result, 0.001); // Should convert to corresponding ACT score
@@ -77,33 +77,33 @@ public class ConversionUtilsTest {
         double actScore = 0;  // No existing ACT score
 
         // Act
-        double result = conversionUtils.sat2act(satScore, actScore);
+        double result = conversionUtils.satToAct(satScore, actScore);
 
         // Assert
         assertEquals(0, result, 0.001); // Should return 0
     }
 
     @Test
-    public void testSat2act_ExistingACTScore_Higher() {
+    public void testSatToActScore_Higher() {
         // Arrange
         double satScore = 1200; // Mid-range SAT score (converts to ~25)
         double actScore = 30;   // Higher existing ACT score
 
         // Act
-        double result = conversionUtils.sat2act(satScore, actScore);
+        double result = conversionUtils.satToAct(satScore, actScore);
 
         // Assert
         assertEquals(30, result, 0.001); // Should keep the higher existing ACT score
     }
 
     @Test
-    public void testSat2act_ExistingACTScore_Lower() {
+    public void testSatToActScore_Lower() {
         // Arrange
         double satScore = 1400; // High-range SAT score (converts to ~31)
         double actScore = 25;   // Lower existing ACT score
 
         // Act
-        double result = conversionUtils.sat2act(satScore, actScore);
+        double result = conversionUtils.satToAct(satScore, actScore);
 
         // Assert
         assertEquals(31, result, 0.001); // Should use the converted score since it's higher
@@ -116,7 +116,7 @@ public class ConversionUtilsTest {
         double actScore = 0;   // No existing ACT score
 
         // Act
-        double result = conversionUtils.clt2act(cltScore, actScore);
+        double result = conversionUtils.cltToAct(cltScore, actScore);
 
         // Assert
         assertEquals(36, result, 0.001); // Should convert to the highest ACT score (36)
@@ -129,7 +129,7 @@ public class ConversionUtilsTest {
         double actScore = 0;  // No existing ACT score
 
         // Act
-        double result = conversionUtils.clt2act(cltScore, actScore);
+        double result = conversionUtils.cltToAct(cltScore, actScore);
 
         // Assert
         assertEquals(23, result, 0.001); // Should convert to corresponding ACT score (75 is in the range [74, 76))
@@ -142,7 +142,7 @@ public class ConversionUtilsTest {
         double actScore = 0;  // No existing ACT score
 
         // Act
-        double result = conversionUtils.clt2act(cltScore, actScore);
+        double result = conversionUtils.cltToAct(cltScore, actScore);
 
         // Assert
         assertEquals(10, result, 0.001); // Should convert to corresponding ACT score
@@ -155,33 +155,33 @@ public class ConversionUtilsTest {
         double actScore = 0; // No existing ACT score
 
         // Act
-        double result = conversionUtils.clt2act(cltScore, actScore);
+        double result = conversionUtils.cltToAct(cltScore, actScore);
 
         // Assert
         assertEquals(0, result, 0.001); // Should return 0
     }
 
     @Test
-    public void testClt2act_ExistingACTScore_Higher() {
+    public void testCltToActScore_Higher() {
         // Arrange
         double cltScore = 75; // Mid-range CLT score (converts to ~23)
         double actScore = 30; // Higher existing ACT score
 
         // Act
-        double result = conversionUtils.clt2act(cltScore, actScore);
+        double result = conversionUtils.cltToAct(cltScore, actScore);
 
         // Assert
         assertEquals(30, result, 0.001); // Should keep the higher existing ACT score
     }
 
     @Test
-    public void testClt2act_ExistingACTScore_Lower() {
+    public void testCltToActScore_Lower() {
         // Arrange
         double cltScore = 95; // High-range CLT score (converts to ~31)
         double actScore = 25; // Lower existing ACT score
 
         // Act
-        double result = conversionUtils.clt2act(cltScore, actScore);
+        double result = conversionUtils.cltToAct(cltScore, actScore);
 
         // Assert
         assertEquals(31, result, 0.001); // Should use the converted score since it's higher

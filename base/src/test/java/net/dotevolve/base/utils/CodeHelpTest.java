@@ -141,8 +141,10 @@ public class CodeHelpTest {
     @Test
     public void testToJson() {
         // Test with simple object
-        assertEquals("{\"age\":30,\"name\":\"John\"}",
-                     CodeHelp.toJson(Map.of("name", "John", "age", 30)));
+        String actualString = CodeHelp.toJson(Map.of("name", "John", "age", 30));
+        String expectedValue1 = "{\"name\":\"John\",\"age\":30}";
+        String expectedValue2 = "{\"age\":30,\"name\":\"John\"}";
+        assertTrue(actualString.equals(expectedValue1) || actualString.equals(expectedValue2));
         
         // Test with null
         assertEquals("null", CodeHelp.toJson(null));
